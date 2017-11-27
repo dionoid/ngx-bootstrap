@@ -1,6 +1,6 @@
 sudo: false
 language: node_js
-node_js: 8
+node_js: "8"
 
 notifications:
   email: false
@@ -33,7 +33,6 @@ stages:
     if: ( branch = development AND type = push ) OR type = pull_request
   - name: bdd-tests
     if: ( branch = development AND type = push ) OR type = pull_request
-
 
 before_install:
   - export CHROME_BIN=chromium-browser
@@ -84,7 +83,6 @@ jobs:
       env: NGV=next
 #    test e2e-bdd
     - stage: bdd-tests
-      env: GOOGLE_CHROME_BINARY = /usr/bin/google-chrome-beta
       before_script:
       - npm run build
       - npm run link
