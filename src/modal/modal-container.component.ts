@@ -14,6 +14,8 @@ import {
 } from './modal-options.class';
 import { BsModalService } from './bs-modal.service';
 import { isBs3 } from '../utils/theme-provider';
+import { PLATFORM_ID, Injectable, Inject } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Component({
   selector: 'modal-container',
@@ -40,7 +42,8 @@ export class ModalContainerComponent implements OnInit, OnDestroy {
   constructor(options: ModalOptions,
               protected _element: ElementRef,
               private bsModalService: BsModalService,
-              private _renderer: Renderer2) {
+              private _renderer: Renderer2,
+              @Inject(PLATFORM_ID) private platformId: any) {
     this.config = Object.assign({}, options);
   }
 
@@ -63,7 +66,7 @@ export class ModalContainerComponent implements OnInit, OnDestroy {
         isBs3() ? CLASS_NAME.IN : CLASS_NAME.SHOW
       );
     }, this.isAnimated ? TRANSITION_DURATIONS.BACKDROP : 0);
-    if (document && document.body) {
+    if (isPlatformBrowser(this.platformId) && document.body) {
       if (this.bsModalService.getModalsCount() === 1) {
         this.bsModalService.checkScrollbar();
         this.bsModalService.setScrollbar();
@@ -114,7 +117,7 @@ export class ModalContainerComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isShown = false;
       if (
-        document &&
+        isPlatformBrowser(this.platformId) &&
         document.body &&
         this.bsModalService.getModalsCount() === 1
       ) {
